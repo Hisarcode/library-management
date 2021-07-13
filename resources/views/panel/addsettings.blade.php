@@ -48,7 +48,7 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Kelas</th>
-                            <th scope="col">Perintah</th>
+                            <th scope="col">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -135,7 +135,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Kategori</th>
                             <th scope="col">Jumlah Maksimal</th>
-                            <th scope="col">Perintah</th>
+                            <th scope="col">Aksi</th>
 
                         </tr>
                     </thead>

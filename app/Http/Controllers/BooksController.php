@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Logs;
 use App\Models\Books;
+use App\Models\BookIssue;
+use App\Models\BookIssueLog;
 use App\Models\Issue;
 use App\Models\Branch;
 use App\Models\Student;
@@ -79,46 +81,18 @@ class BooksController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		$books = $request->all();
-
-		// DB::transaction( function() use($books) {
-		// dd($books);
-		$db_flag = false;
-		$user_id = Auth::id();
-		$book_title = Books::create([
-			'title'			=> $books['title'],
-			'author'		=> $books['author'],
-			'description' 	=> $books['description'],
-			'category_id'	=> $books['category_id'],
-			'added_by'		=> $user_id
+		$qty = (int)$request->qty;
+		// dd($request->category_id);
+		Books::create([
+			'title'			=> $request->title,
+			'author'		=> $request->author,
+			'description' 	=> $request->description,
+			'qty' 			=> $qty,
+			'issue' 			=> 0,
+			'category_id'	=> $request->category,
+			'added_by'		=> Auth::id(),
 		]);
-		// dd($book_title);
-		$newId = $book_title->book_id;
-		// dd($newId);
-		if (!$book_title) {
-			$db_flag = true;
-		} else {
-			$number_of_issues = $books['number'];
-
-			for ($i = 0; $i < $number_of_issues; $i++) {
-
-				$issues = Issue::create([
-					'book_id'	=> $newId,
-					'added_by'	=> $user_id
-				]);
-
-				if (!$issues) {
-					$db_flag = true;
-				}
-			}
-		}
-
-		if ($db_flag)
-			return 'Terdapat kesalahan data';
-
-		// });
-
-		return "Buku berhasil ditambahkan ke database";
+		return redirect()->route('all-books');
 	}
 
 
@@ -260,13 +234,15 @@ class BooksController extends Controller
 		return view('panel.addbookcategory', compact('categories'));
 	}
 
-	public function editCategory($id){
+	public function editCategory($id)
+	{
 		$category = BookCategories::find($id);
 		return view('panel.editbookcategory', compact('category'));
 	}
 
-	public function updateCategory($id, Request $request){
-		$category = BookCategories::find($id);		
+	public function updateCategory($id, Request $request)
+	{
+		$category = BookCategories::find($id);
 		$category->update([
 			'category' => $request->category,
 		]);
@@ -275,8 +251,9 @@ class BooksController extends Controller
 	}
 
 
-	public function deleteCategory($id){
-		$category = BookCategories::find($id);		
+	public function deleteCategory($id)
+	{
+		$category = BookCategories::find($id);
 		$category->delete();
 		return redirect()->route('add-book-category');
 	}
@@ -292,15 +269,16 @@ class BooksController extends Controller
 	public function renderAllBooks()
 	{
 		$books = Books::all();
-		$x=0;
-		foreach($books as $book){
-			$kategori = Categories::find($book['category_id']);
+		$x = 0;
+		foreach ($books as $book) {
+			$kategori = BookCategories::find($book['category_id']);
+			// dd($kategori);
 			$jml_buku = DB::table('book_issues')->where('book_id', $book['book_id'])->get();
 			$jml_pinjam = DB::table('book_issues')->where('book_id', $book['book_id'])->where('available_status', 1)->get();
 			$books[$x]['category'] = $kategori;
 			$books[$x]['total'] = count($jml_buku);
 			$books[$x]['dipinjam'] = count($jml_pinjam);
-			
+
 			$x++;
 		}
 		// dd($books);
@@ -308,10 +286,11 @@ class BooksController extends Controller
 		return view('panel.allbook', compact('books'));
 	}
 
-	public function editBook($id){
+	public function editBook($id)
+	{
 		$book = Books::find($id);
-		
-		
+
+
 		$kategori = Categories::find($book['category_id']);
 		$jml_buku = DB::table('book_issues')->where('book_id', $id)->get();
 		$jml_pinjam = DB::table('book_issues')->where('book_id', $id)->where('available_status', 1)->get();
@@ -319,24 +298,33 @@ class BooksController extends Controller
 		$book['total'] = count($jml_buku);
 		$book['dipinjam'] = count($jml_pinjam);
 
-		$categories = Categories::all();		
-		
-		return view('panel.editBook', compact('book', 'categories'));				
+		$categories = Categories::all();
+
+		return view('panel.editBook', compact('book', 'categories'));
 	}
 
-	public function updateBook(Books $book, Request $request){
+	public function updateBook(Books $book, Request $request)
+	{
 		$book->update([
 			'title' => $request->title,
 			'author' => $request->author,
 			'description' => $request->description,
-			'category_id' => $request->category,			
+			'category_id' => $request->category,
+			'qty' => $request->qty,
 
 		]);
 
 		return redirect()->route('all-books');
 	}
 
-	public function deleteBook(Books $book){
+	public function deleteBook(Books $book)
+	{
+
+		$Issue_id = BookIssue::where('book_id', $book->book_id)->get()->all();
+		$bookIssue = BookIssue::where('book_id', $book->book_id)->delete();
+		foreach ($Issue_id as $id) {
+			$bookIssue = BookIssueLog::where('book_issue_id', $id->issue_id)->delete();
+		}
 		$book->delete();
 		return redirect()->route('all-books');
 	}

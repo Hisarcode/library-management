@@ -11,6 +11,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Models\StudentCategories;
 use App\Http\Controllers\HomeController;
+use App\Models\BookIssueLog;
 use Illuminate\Support\Facades\Redirect;
 
 class StudentController extends Controller
@@ -252,6 +253,46 @@ class StudentController extends Controller
 			->with('student_categories_list', $db_control->student_categories_list);
 	}
 
+	public function semuaMurid()
+	{
+		$students = Student::get()->all();
+		$x = 0;
+		foreach ($students as $student) {
+			$students[$x]['buku_dipinjam']  = 	count(BookIssueLog::where('student_id', '=', $student['student_id'])->get());
+			$x++;
+		}
+		// dd($students);
+		// BookIssueLog::
+		return view('panel.students', compact('students'));
+	}
+
+	public function editMurid($id)
+	{
+		$student = Student::find($id);
+		// dd($student);
+		return view('panel.studentEdit', compact('student'));
+	}
+
+	public function updateMurid(Request $request, $id)
+	{
+		$student = Student::find($id);
+		$student->update([
+			'first_name' => $request->first_name,
+			'last_name' => $request->last_name,
+			'email_id' => $request->email_id,
+			'year' => $request->year,
+			'roll_num' => $request->roll_num,
+		]);
+
+		return redirect()->route('registered-students');
+	}
+	public function deleteMurid($id)
+	{
+		$student = Student::find($id);
+		$student->delete();
+		return redirect()->route('registered-students');
+	}
+
 	public function renderApprovalStudents()
 	{
 		$db_control = new HomeController;
@@ -315,13 +356,15 @@ class StudentController extends Controller
 			->with('student_category', $student_category);
 	}
 
-	public function editClass($id){
+	public function editClass($id)
+	{
 		$branch = Branch::find($id);
 		return view('panel.editclass', compact('branch'));
 	}
 
-	public function updateClass($id, Request $request){
-		$branch = Branch::find($id);		
+	public function updateClass($id, Request $request)
+	{
+		$branch = Branch::find($id);
 		$branch->update([
 			'branch' => $request->branch,
 		]);
@@ -335,13 +378,15 @@ class StudentController extends Controller
 	// 	return redirect()->route('settings');
 	// }
 
-	public function editStudentClass($id){
+	public function editStudentClass($id)
+	{
 		$studentClass = StudentCategories::find($id);
 		return view('panel.editstudentclass', compact('studentClass'));
 	}
 
-	public function updateStudentClass($id, Request $request){
-		$studentClass = StudentCategories::find($id);		
+	public function updateStudentClass($id, Request $request)
+	{
+		$studentClass = StudentCategories::find($id);
 		$studentClass->update([
 			'category' => $request->category,
 			'max_allowed' => $request->max_allowed,

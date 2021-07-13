@@ -56,8 +56,8 @@
                 <div class="control-group">
                     <label class="control-label">Jumlah Buku</label>
                     <div class="controls">
-                        <input type="number" id="number" data-form-field="number" name="number"
-                            placeholder="Masukkan Jumlah Buku Disini" class="span8" value="{{$book['total']}}">
+                        <input type="number" id="number" data-form-field="number" name="qty"
+                            placeholder="Masukkan Jumlah Buku Disini" class="span8" value="{{$book['qty']}}">
                     </div>
                 </div>
                 <div class="control-group">

@@ -76,7 +76,7 @@ $(document).on("click","#addbooks",function(){
         author = f$('input[data-form-field~=author]').val();
         description = f$('textarea[data-form-field~=description]').val();
         category_id = f$('select[data-form-field~=category]').val();
-        number = parseInt(f$('input[data-form-field~=number]').val());
+        number = f$('input[data-form-field~=number]').val();
         auth_user = f$('input[data-form-field~=auth_user]').val();
         _token = f$('input[data-form-field~=token]').val();
 

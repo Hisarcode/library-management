@@ -19,26 +19,28 @@
                     <thead>
                         <tr>
                             <th>ID Peminjaman</th>
-                            <th>ID Peminjaman Buku</th>
+                            <th>ID Buku</th>
                             <th>Judul Buku</th>
                             <th>Nama Murid</th>
                             <th class="align-self-center">Kelas</th>
-                            <th class="align-self-center">Kategori</th>
+                            {{-- <th class="align-self-center">Kategori</th> --}}
                             <th>Dipinjam Pada Tanggal</th>
                             <th>Dikembalikan Pada Tanggal</th>
                         </tr>
                     </thead>
                     <tbody id="issue-logs-table">
-                        @foreach ($riwayat as $item)
+                        @foreach ($reports as $report)
                         <tr class="text-center">
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$item->book_issue_id}}</td>
-                            <td>{{$item->book_name}}</td>
-                            <td>{{$item->student_name}}</td>
-                            <td>{{$item->kelas}}</td>
-                            <td>{{$item->kategori}}</td>
-                            <td>{{$item->issued_at}}</td>
-                            <td><?= $item->return_time ?></td>
+                            <td>{{$report['id']}}</td>
+                            <td>{{$report['book_id']}}</td>
+                            <td>{{$report['book']['title']}}</td>
+                            <td>{{$report['student']['first_name']}}</td>
+                            <td>{{$report['student']['branch']}}</td>
+                            {{-- <td>{{$report->kategori}}</td> --}}
+                            <td>{{date("d-m-Y", strtotime($report['issue_at']))  }}</td>
+                            <td><?php if($report['return_at'] == null) {echo 'Belum Dikembalikan';} else {
+                                echo date("d-m-Y", strtotime($report['return_at']));
+                            } ?></td>
                         </tr>
                         @endforeach
                     </tbody>

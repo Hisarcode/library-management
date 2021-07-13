@@ -31,20 +31,21 @@
                     <th>Kategori</th>
                     <th>Tersedia</th>
                     <th>Jumlah</th>
-                    <th>#</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody id="all-books">
                 @foreach ($books as $book)
 
                 <tr class="text-center">
-                    <td>{{$loop->iteration}}</td>
+                    <td>{{$book['book_id']}}</td>
                     <td>{{$book['title']}}</td>
                     <td>{{$book['author']}}</td>
                     <td>{{$book['description']}}</td>
                     <td>{{$book['category']['category']}}</td>
-                    <td>{{$book['dipinjam']}}</td>
-                    <td>{{$book['total']}}</td>
+                    <td>{{$book['qty'] - $book['issue']}}</td>
+                    <td>{{$book['qty']}}</td>
+                    {{-- <td>{{$book['dipinjam']}}</td> --}}
 
                     <td>
                         <a href="{{route('book.edit', $book['book_id'])}}" class="btn btn-primary">Edit</a>

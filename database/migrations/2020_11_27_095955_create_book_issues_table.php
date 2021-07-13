@@ -16,7 +16,7 @@ class CreateBookIssuesTable extends Migration
         Schema::create('book_issues', function (Blueprint $table) {
             $table->bigIncrements('issue_id');
             $table->integer('book_id');
-            $table->tinyInteger('available_status')->default(1);
+            $table->integer('available_status');
             $table->integer('added_by')->unsigned();
 
             $table->timestamps();

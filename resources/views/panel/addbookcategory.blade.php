@@ -42,7 +42,7 @@
                     <tr>
                         <th style="width: 5%">No.</th>
                         <th>Kategori</th>
-                        <th>#</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="all-books">

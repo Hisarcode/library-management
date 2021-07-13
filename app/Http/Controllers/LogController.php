@@ -196,87 +196,105 @@ class LogController extends Controller
 
 	public function renderLogs()
 	{
-		return view('panel.logs');
+		$reports = BookIssueLog::where('return_at', '=', null)->get();
+		$x = 0;
+		// dd($reports);
+		foreach ($reports as $report) {
+			$reports[$x]['book'] = Books::find($report['book_id']);
+			$x++;
+		}
+
+		$x = 0;
+		foreach ($reports as $report) {
+			$reports[$x]['student'] = Student::find($report['student_id']);
+			$x++;
+		}
+
+		// dd($reports);
+		return view('panel.logs', compact('reports'));
 	}
 
 	public function renderIssueReturn()
 	{
 		return view('panel.issue-return');
 	}
+
+	public function pinjamBuku(Request $request)
+	{
+
+		BookIssueLog::create([
+			'book_id' => $request->book_id,
+			'student_id' => $request->student_id,
+			'issue_at' => now(),
+			'return_at' => null,
+			'is_return' => 0,
+		]);
+		$book = Books::find($request->book_id);
+		$issue = $book['issue'] + 1;
+		// dd($issue);
+		$book->update([
+			'issue' => $issue
+		]);
+
+
+		return redirect()->route('currently-issued');
+	}
+
+	public function kembalikanBuku(Request $request)
+	{
+		$book_issue = BookIssueLog::find($request->return_book_id);
+		$book_issue->update([
+			'return_at' => now(),
+		]);
+
+
+		$book = Books::find($book_issue['book_id']);
+		$issue = $book['issue'] - 1;
+		$book->update([
+			'issue' => $issue
+		]);
+
+		return redirect()->route('currently-issued');
+	}
+
+
 	public function laporantotal()
 	{
-		$riwayat = BookIssueLog::get()->all();
-
-
-		for ($i = 0; $i < count($riwayat); $i++) {
-
-			$issue_id = $riwayat[$i]['book_issue_id'];
-			$student_id = $riwayat[$i]['student_id'];
-
-			// to get the name of the book from book issue id
-			$issue = Issue::find($issue_id);
-			$book_id = $issue->book_id;
-			$book = Books::find($book_id);
-			$riwayat[$i]['book_name'] = $book->title;
-
-			// to get the name of the student from student id
-			$student = Student::find($student_id);
-			$riwayat[$i]['student_name'] = $student->first_name . ' ' . $student->last_name;
-			$riwayat[$i]['kelas'] = $student->branch;
-			$kategori = StudentCategories::find($student->category);
-			$riwayat[$i]['kategori'] = $kategori->category;
-
-			// change issue date and return date in human readable format
-
-			$riwayat[$i]['issued_at'] = date('d-M', strtotime($riwayat[$i]['issued_at']));
-			if ($riwayat[$i]['return_time'] == 0) {
-				$riwayat[$i]['return_time'] =  '<p class="color:red">Pending</p>';
-			} else {
-				$riwayat[$i]['return_time'] = date('d-M', strtotime($riwayat[$i]['return_time']));
-			}
+		$reports = BookIssueLog::get()->all();
+		$x = 0;
+		foreach ($reports as $report) {
+			$reports[$x]['book'] = Books::find($report['book_id']);
+			$x++;
 		}
 
-		return view('panel.totalpeminjaman', compact('riwayat'));
+		$x = 0;
+		foreach ($reports as $report) {
+			$reports[$x]['student'] = Student::find($report['student_id']);
+			$x++;
+		}
+
+		// dd($reports);
+		return view('panel.totalpeminjaman', compact('reports'));
 	}
 
 
-public function cetakpdf()
-{
-	$riwayat = BookIssueLog::get()->all();
-
-
-	for ($i = 0; $i < count($riwayat); $i++) {
-
-		$issue_id = $riwayat[$i]['book_issue_id'];
-		$student_id = $riwayat[$i]['student_id'];
-
-		// to get the name of the book from book issue id
-		$issue = Issue::find($issue_id);
-		$book_id = $issue->book_id;
-		$book = Books::find($book_id);
-		$riwayat[$i]['book_name'] = $book->title;
-
-		// to get the name of the student from student id
-		$student = Student::find($student_id);
-		$riwayat[$i]['student_name'] = $student->first_name . ' ' . $student->last_name;
-		$riwayat[$i]['kelas'] = $student->branch;
-		$kategori = StudentCategories::find($student->category);
-		$riwayat[$i]['kategori'] = $kategori->category;
-
-		// change issue date and return date in human readable format
-
-		$riwayat[$i]['issued_at'] = date('d-M', strtotime($riwayat[$i]['issued_at']));
-		if ($riwayat[$i]['return_time'] == 0) {
-			$riwayat[$i]['return_time'] =  '<p class="color:red">Pending</p>';
-		} else {
-			$riwayat[$i]['return_time'] = date('d-M', strtotime($riwayat[$i]['return_time']));
+	public function cetakpdf()
+	{
+		$reports = BookIssueLog::get()->all();
+		$x = 0;
+		foreach ($reports as $report) {
+			$reports[$x]['book'] = Books::find($report['book_id']);
+			$x++;
 		}
+
+		$x = 0;
+		foreach ($reports as $report) {
+			$reports[$x]['student'] = Student::find($report['student_id']);
+			$x++;
+		}
+
+		// dd($reports);
+		$pdf = PDF::loadview('panel.cetak_pdf', compact('reports'));
+		return $pdf->download('Laporan.pdf');
 	}
-
-	$pdf = PDF::loadview('panel.cetak_pdf',compact('riwayat'));
-    return $pdf->download('nama file');
-
-}
-
-
 }
