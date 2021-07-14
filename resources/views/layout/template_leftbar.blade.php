@@ -7,6 +7,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ URL::route('student-registration') }}">
+                    <i class="menu-icon icon-plus"></i>REGISTRASI MURID
+                </a>
+            </li>
+            <li>
                 <a href="{{ URL::route('students-for-approval') }}">
                     <i class="menu-icon icon-filter"></i>MURID YANG BELUM DISETUJUI
                 </a>
@@ -23,7 +28,7 @@
             </li>
             <li>
                 <a href="{{ URL::route('add-book-category') }}">
-                    <i class="menu-icon icon-folder-open-alt"></i>TAMBAH KATEGORI BUKU
+                    <i class="menu-icon icon-folder-open-alt"></i>KATEGORI BUKU
                 </a>
             </li>
             <li>
@@ -33,7 +38,7 @@
             </li>
             <li>
                 <a href="{{ URL::route('settings') }}">
-                    <i class="menu-icon icon-cog"></i>TAMBAH KELAS
+                    <i class="menu-icon icon-cog"></i>KELAS
                 </a>
             </li>
 
@@ -44,7 +49,7 @@
             </li>
             <li>
                 <a href="{{ URL::route('currently-issued') }}">
-                    <i class="menu-icon icon-list-ul"></i>LIHAT BUKU YANG SEDANG DIPINJAM
+                    <i class="menu-icon icon-list-ul"></i>BUKU YANG SEDANG DIPINJAM
                 </a>
             </li>
             <li>

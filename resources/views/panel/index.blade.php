@@ -5,131 +5,42 @@
     <div class="btn-controls">
         <div class="btn-box-row row-fluid">
             <button class="btn-box span12" style="background: #9400D3; ">
-                <b style="color:#fff">Aplikasi Inventaris Buku Untuk Perpustakaan SMPN 13 Pontianak</b>
+                <b style="color:#fff">Data Perpustakaan</b>
             </button>
         </div>
 
-        <div class="module span4 offset2">
-            <div class="module-head">
-                <h3>Pendaftaran dan Pencarian</h3>
-            </div>
-            <div class="module-body">
-                <p><a href="{{ URL::route('student-registration') }}"><strong>Form Registrasi Murid</strong></a></p>
-                <p><a href="{{ URL::route('search-book') }}"><strong>Cari Buku</strong></a></p>
-            </div>
-        </div>
+
         <div class="btn-box-row row-fluid">
             <button class="btn-box big span4 homepage-form-box" id="findbookbox">
-                <i class="icon-list"></i>
-                <b>Cari Buku</b>
+                <h1>{{ $buku_tersedia }}</h1>
+                <b>Buku Tersedia</b>
             </button>
 
             <button class="btn-box big span4 homepage-form-box" id="findissuebox">
-                <i class="icon-book"></i>
-                <b>Cari Buku Yang Tersedia</b>
+                <h1>{{ $buku_dipinjam }}</h1>
+                <b>Buku Dipinjam</b>
             </button>
 
             <button class="btn-box big span4 homepage-form-box" id="findstudentbox">
-                <i class="icon-user"></i>
-                <b>Cari Murid</b>
+                <h1>{{ $total_murid }}</h1>
+                <b>Total Murid</b>
             </button>
         </div>
 
-        <div class="content">
-            <div class="module" style="display: none;">
-                <div class="module-body">
-                    <form class="form-horizontal row-fluid" id="findbookform">
-                        <div class="control-group">
-                            <label class="control-label">Judul atau Pengarang<br>dari Buku</label>
-                            <div class="controls">
-                                <div class="span9">
-                                    <textarea class="span12" rows="2"></textarea>
-                                </div>
-                                <div class="span3">
-                                    <a class="btn homepage-form-submit " style="background-color:  #9400D3; color:#fff"><i class="icon-search"></i>
-                                        Cari</a>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <hr>
-                    <table class="table table-striped table-bordered table-condensed" style="display: none;">
-                        <thead>
-                            <tr>
-                                <th>ID Buku</th>
-                                <th>Judul Buku</th>
-                                <th>Pengarang</th>
-                                <th>Deskripsi</th>
-                                <th>Kategori</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="book-results"></tbody>
-                    </table>
-                </div>
-            </div>
 
-            <div class="module" style="display: none;">
-                <div class="module-body">
-                    <form class="form-horizontal row-fluid" id="findissueform">
-                        <div class="control-group">
-                            <label class="control-label">Masukkan ID Buku</label>
-                            <div class="controls">
-                                <input type="number" placeholder="" class="span9">
-                                <a class="btn homepage-form-submit" style="background-color:  #9400D3; color:#fff"><i class="icon-search"></i> Cari</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="module-body" id="module-body-results"></div>
-            </div>
-
-            <div class="module" style="display: none;">
-                <div class="module-body">
-                    <form class="form-horizontal row-fluid" id="findstudentform">
-                        <div class="control-group">
-                            <label class="control-label">Masukkan ID Murid</label>
-                            <div class="controls">
-                                <input type="text" placeholder="" class="span9">
-                                <a class="btn homepage-form-submit" style="background-color:  #9400D3; color:#fff"><i class="icon-search"></i> Cari</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="module-body" id="module-body-results"></div>
-            </div>
-        </div>
-    </div>
-    <input type="hidden" name="" id="branches_list" value="{{ json_encode($branch_list) }}">
-    <input type="hidden" name="" id="student_categories_list" value="{{ json_encode($student_categories_list) }}">
-    <input type="hidden" name="" id="categories_list" value="{{ json_encode($categories_list) }}">
-    <input type="hidden" id="_token" data-form-field="token" value="{{ csrf_token() }}">
-
-</div>
-@stop
+        <script type="text/javascript" src="{{asset('static/custom/js/script.mainpage.js') }}"></script>
 
 
-@section('custom_bottom_script')
-<script type="text/javascript">
-    var branches_list = $('#branches_list').val(),
-        student_categories_list = $('#student_categories_list').val(),
-        categories_list = $('#categories_list').val(),
-        _token = $('#_token').val();
+        <script type="text/template" id="search_book">
+            @include('underscore.search_book')
 </script>
-
-<script type="text/javascript" src="{{asset('static/custom/js/script.mainpage.js') }}"></script>
-
-
-<script type="text/template" id="search_book">
-    @include('underscore.search_book')
+        <script type="text/template" id="search_issue">
+            @include('underscore.search_issue')
 </script>
-<script type="text/template" id="search_issue">
-    @include('underscore.search_issue')
+        <script type="text/template" id="search_student">
+            @include('underscore.search_student')
 </script>
-<script type="text/template" id="search_student">
-    @include('underscore.search_student')
+        <script type="text/template" id="approvalstudents_show">
+            @include('underscore.approvalstudents_show')
 </script>
-<script type="text/template" id="approvalstudents_show">
-    @include('underscore.approvalstudents_show')
-</script>
-@stop
+        @stop

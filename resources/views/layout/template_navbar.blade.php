@@ -3,11 +3,13 @@
         <div class="container">
             <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
                 <i class="icon-reorder shaded"></i></a>
-            <a class="brand" href="{{ URL::route('home') }}" style="color:#fff;">Aplikasi Inventaris Buku Untuk Perpustakaan SMPN 13 Pontianak</a>
+            <a class="brand" href="{{ URL::route('home') }}" style="color:#fff;">Aplikasi Inventaris Buku Perpustakaan
+                SMPN 13 Pontianak</a>
             <div class="nav-collapse collapse navbar-inverse-collapse">
                 <ul class="nav pull-right">
                     <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ asset('images/passport-size.png') }}" class="nav-avatar" />{{ auth()->user()->username }}
+                            <img src="{{ asset('images/passport-size.png') }}"
+                                class="nav-avatar" />{{ auth()->user()->username }}
                             <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="#" target="_blank">Profil</a></li>

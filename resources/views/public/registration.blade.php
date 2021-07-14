@@ -1,12 +1,9 @@
-@extends('account.index')
+@extends('layout.index')
 
 @section('content')
-
-
-
-<div class="wrapper">
-	<div class="container">
-		<div class="row">
+<div class="content">
+    <div class="btn-controls">
+		
 			@if(Session::has('successalert'))
 
 			<div class="alert alert-success">
@@ -15,7 +12,7 @@
 			</div>
 
 			@endif
-			<div class="module module-login span8 offset2">
+			<div class="module module-login ">
 				<form class="form-vertical" action="{{ URL::route('student-registration-post') }}" method="POST">
 					<div class="module-head">
 						<h3>Form Registrasi Murid</h3>
@@ -84,14 +81,36 @@
 								@csrf
 							</div>
 						</div>
-						<a href="{{ URL::route('account-sign-in') }}">Kembali</a>
+						
 					</div>
 				</form>
 			</div>
-		</div>
+		
 	</div>
 </div>
+@stop
 
-@include('account.style')
+@section('custom_bottom_script')
+<script type="text/javascript">
+    var branches_list = $('#branches_list').val(),
+        student_categories_list = $('#student_categories_list').val(),
+        categories_list = $('#categories_list').val(),
+        _token = $('#_token').val();
+</script>
 
+<script type="text/javascript" src="{{asset('static/custom/js/script.mainpage.js') }}"></script>
+
+
+<script type="text/template" id="search_book">
+    @include('underscore.search_book')
+</script>
+<script type="text/template" id="search_issue">
+    @include('underscore.search_issue')
+</script>
+<script type="text/template" id="search_student">
+    @include('underscore.search_student')
+</script>
+<script type="text/template" id="approvalstudents_show">
+    @include('underscore.approvalstudents_show')
+</script>
 @stop
