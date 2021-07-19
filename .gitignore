@@ -13,3 +13,5 @@ yarn-error.log
 public/images/Thumbs.db
 forge.sql
 composer.lock
+*.rar
+*.zip

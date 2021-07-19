@@ -255,7 +255,7 @@ class StudentController extends Controller
 
 	public function semuaMurid()
 	{
-		$students = Student::get()->all();
+		$students = Student::where('approved', '1')->get();
 		$x = 0;
 		foreach ($students as $student) {
 			$students[$x]['buku_dipinjam']  = 	count(BookIssueLog::where('student_id', '=', $student['student_id'])->get());
